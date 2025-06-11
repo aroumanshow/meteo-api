@@ -10,13 +10,17 @@ UNITS = "metric"
 
 @app.route("/")
 def meteo():
-    ville = request.args.get("ville", DEFAULT_CITY)
+    ville = request.args.get("ville")
+    if not ville or ville.strip() == "":
+        ville = DEFAULT_CITY
+    
     url = f"http://api.openweathermap.org/data/2.5/weather?q={ville}&appid={API_KEY}&units={UNITS}&lang=fr"
-
     response = requests.get(url)
+    
     if response.status_code != 200:
-        return f"❌ Ville inconnue : {ville}"
-
+        error_message = response.json().get("message", "Erreur inconnue")
+        return f"❌ Ville inconnue : {ville} ({error_message})"
+    
     data = response.json()
     temp = round(data["main"]["temp"])
     desc = data["weather"][0]["description"].capitalize()
