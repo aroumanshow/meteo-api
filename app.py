@@ -3,7 +3,7 @@ import requests
 
 app = Flask(__name__)
 
-API_KEY = "22b3682c26931832cbd25a04e66fc9d7"
+API_KEY = os.getenv("API_KEY")
 DEFAULT_CITY = "Paris"
 UNITS = "metric"
 
